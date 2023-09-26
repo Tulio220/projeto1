@@ -1,0 +1,10 @@
+{
+    "abc1": {
+        "nome": "10",
+        "preco": 15.3
+    },
+    "abc2": {
+        "nome": "batata",
+        "preco": 20.4
+    }
+}
