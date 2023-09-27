@@ -1,12 +1,12 @@
-import json
+import json #importa biblioteca
 
 # Função para carregar os dados do arquivo JSON
 def carregar_dados():
-    try:
+    try: # onde tenta executar um código
         with open("2BIM/Projeto/estoque.json", 'r') as arquivo:
-            return json.load(arquivo)
-    except FileNotFoundError:
-        return {}
+            return json.load(arquivo) #carrega o arquivo json
+    except FileNotFoundError: #acionada quando o Py tenta abrir um arquivo que não existe
+        return {} #repete
 
 # Carrega os dados do arquivo JSON no início do programa
 banco_dados = carregar_dados()
@@ -39,17 +39,20 @@ while opcao != 8:
         print('-'*10)
         print("Cadastro")
         codigo = input('Digite o código: ')
-        
+
         # Verifica se o produto já existe no estoque
         if codigo in banco_dados:
             print("Produto já inserido!")
         else:
             nome = input('Digite o nome do produto: ')
             preco = float(input("Digite o preço do kg/unidade: "))
+            quantidade = float(input("Digite a quantidade de produtos: "))  # Adicione esta linha para inserir a quantidade
+
             # Adiciona o novo produto ao dicionário "banco_dados"
-            banco_dados[codigo] = {"nome": nome, "preco": preco}
+            banco_dados[codigo] = {"nome": nome, "preco": preco, "quantidade": quantidade}
+
     
-    # Opção 2: Consulta um produto por código
+  # Opção 2: Consulta um produto por código
     elif opcao == 2:
         print('-'*10)
         print("Consultar um produto por código")
@@ -57,11 +60,13 @@ while opcao != 8:
         
         # Verifica se o código existe no estoque
         if codigo in banco_dados:
-            print(f"Nome: {banco_dados[codigo]['nome']}")
-            print(f"Preço: {banco_dados[codigo]['preco']}")
+            produto = banco_dados[codigo]
+            print(f"Nome: {produto['nome']}")
+            print(f"Preço: {produto['preco']}")
+            print(f"Quantidade: {produto['quantidade']}")  # Adicione esta linha para mostrar a quantidade
         else:
             print("Produto não encontrado.")
-    
+
     # Opção 3: Consulta todos os produtos
     elif opcao == 3:
         print('-'*10)
@@ -71,9 +76,11 @@ while opcao != 8:
                 print(f"Código: {codigo}")
                 print(f"Nome: {produto['nome']}")
                 print(f"Preço: {produto['preco']}")
+                print(f"Quantidade: {produto['quantidade']}")  # Adicione esta linha para mostrar a quantidade
                 print("")
         else:
             print("Nenhum produto cadastrado.")
+
     
     # Opção 4: Altera o preço de um produto
     elif opcao == 4:
@@ -109,7 +116,7 @@ while opcao != 8:
         # Abre o arquivo "estoque.json" em modo de escrita ('w')
         with open("Projeto\estoque.json", 'w') as arquivo:
             # Salva o dicionário "banco_dados" de volta no arquivo JSON com formatação indentada
-            json.dump(banco_dados, arquivo, indent=4)
+            json.dump(banco_dados, arquivo, indent=4) #.dump escrever um objeto #indent define o número de espaços em branco
     
     # Opção 7: Excluir um produto do estoque
     elif opcao == 7:
@@ -119,22 +126,22 @@ while opcao != 8:
         
         if codigo in banco_dados:
             # Confirmar a exclusão com o usuário
-            confirmacao = input(f"Você tem certeza que deseja excluir o produto '{banco_dados[codigo]['nome']}' (S/N)? ").strip().lower()
+            confirmacao = input(f"Você tem certeza que deseja excluir o produto '{banco_dados[codigo]['nome']}' (S/N)? ").strip().lower()#.strip remove os espaços em branco
             if confirmacao == 's':
-                del banco_dados[codigo]
+                del banco_dados[codigo] #del, usada se o usuário confirmar a exclusão do produto
                 print(f"Produto '{codigo}' excluído com sucesso.")
             else:
                 print("Exclusão cancelada.")
         else:
             # Se o código não existe, pedir ao usuário para tentar novamente ou voltar ao menu central
             while True:
-                opcao_invalida = input("Produto não encontrado. Digite 'T' para tentar novamente ou 'M' para voltar ao menu central: ").strip().lower()
+                opcao_invalida = input("Produto não encontrado. Digite 'T' para tentar novamente ou 'M' para voltar ao menu central: ").strip().lower()#.strip remove os espaços em branco
                 if opcao_invalida == 't':
                     codigo = input('Digite o código do produto a ser excluído: ')
                     if codigo in banco_dados:
                         confirmacao = input(f"Você tem certeza que deseja excluir o produto '{banco_dados[codigo]['nome']}' (S/N)? ").strip().lower()
                         if confirmacao == 's':
-                            del banco_dados[codigo]
+                            del banco_dados[codigo]#del, usada se o usuário confirmar a exclusão do produto
                             print(f"Produto '{codigo}' excluído com sucesso.")
                         else:
                             print("Exclusão cancelada.")
